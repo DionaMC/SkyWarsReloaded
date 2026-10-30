@@ -171,7 +171,7 @@ public class PlayerData {
     }
 
     public Player getPlayer() {
-        return SkyWarsReloaded.get().getServer().getPlayer(this.uuid);
+        return Util.get().getPlayer(this.uuid);
     }
 
     public UUID getUuid() {

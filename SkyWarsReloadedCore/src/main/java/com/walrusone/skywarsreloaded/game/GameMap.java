@@ -188,10 +188,8 @@ public class GameMap {
             File dataDirectory = SkyWarsReloaded.get().getDataFolder();
             File maps = new File(dataDirectory, "maps");
 
-            String root = SkyWarsReloaded.get().getServer().getWorldContainer().getAbsolutePath();
-            File rootDirectory = new File(root);
             File source = new File(maps, name);
-            File target = new File(rootDirectory, name);
+            File target = wm.getWorldFolder(name);
             wm.copyWorld(source, target);
             boolean mapExists = false;
             if (target.isDirectory()) {
@@ -261,7 +259,7 @@ public class GameMap {
     private static boolean loadWorld(String worldName, GameMap gMap, boolean readOnly) {
         File dataDirectory = new File(SkyWarsReloaded.get().getDataFolder(), "maps");
         File source = new File(dataDirectory, worldName);
-        File target = new File(SkyWarsReloaded.get().getServer().getWorldContainer().getAbsolutePath(), worldName);
+        File target = SkyWarsReloaded.getWM().getWorldFolder(worldName);
         boolean mapExists = false;
         if (target.isDirectory()) {
             String[] list = target.list();
@@ -323,7 +321,7 @@ public class GameMap {
     public void checkSpectators() {
         if (!spectators.isEmpty()) {
             for (UUID uuid : spectators) {
-                Player spec = SkyWarsReloaded.get().getServer().getPlayer(uuid);
+                Player spec = Util.get().getPlayer(uuid);
                 if (spec == null) continue;
                 if (isOutsideBorder(spec)) {
                     CoordLoc ss = getSpectateSpawn();
@@ -598,14 +596,14 @@ public class GameMap {
             }
         }
         for (UUID player : waitingPlayers) {
-            Player pl = Bukkit.getPlayer(player);
+            Player pl = Util.get().getPlayer(player);
             if (pl == null) continue;
             if (!allPlayers.contains(pl)) {
                 allPlayers.add(pl);
             }
         }
         for (UUID player : spectators) {
-            Player pl = Bukkit.getPlayer(player);
+            Player pl = Util.get().getPlayer(player);
             if (pl == null) continue;
             if (!allPlayers.contains(pl)) {
                 allPlayers.add(pl);
@@ -628,7 +626,7 @@ public class GameMap {
             }
             for (UUID pUid : waitingPlayers) {
                 if (!mapContainsDead(pUid)) {
-                    Player p = Bukkit.getPlayer(pUid);
+                    Player p = Util.get().getPlayer(pUid);
                     if (p != null && !receivers.contains(p)) {
                         receivers.add(p);
                     }
@@ -636,7 +634,7 @@ public class GameMap {
             }
         }
         for (UUID uuid : spectators) {
-            Player player = SkyWarsReloaded.get().getServer().getPlayer(uuid);
+            Player player = Util.get().getPlayer(uuid);
             if (player != null) {
                 receivers.add(player);
             }
@@ -996,7 +994,7 @@ public class GameMap {
         this.setMatchState(MatchState.OFFLINE);
         ImmutableList<UUID> specUUIDs = ImmutableList.copyOf(this.getSpectators());
         for (final UUID uuid : specUUIDs) {
-            final Player player = SkyWarsReloaded.get().getServer().getPlayer(uuid);
+            final Player player = Util.get().getPlayer(uuid);
             if (player != null) {
                 SkyWarsReloaded.get().getPlayerManager().removePlayer(
                         player, PlayerRemoveReason.PLAYER_QUIT_GAME, null, false);
@@ -1021,9 +1019,7 @@ public class GameMap {
             boolean mapFolderExists = false;
 
             // Find map folder
-            String root = server.getWorldContainer().getAbsolutePath();
-            File rootDirectory = new File(root);
-            File target = new File(rootDirectory, mapName);
+            File target = worldManager.getWorldFolder(mapName);
             if (target.isDirectory()) {
                 String[] list = target.list();
                 if (list != null && list.length > 0) {
@@ -1884,7 +1880,7 @@ public class GameMap {
             File dataDirectory = new File(SkyWarsReloaded.get().getDataFolder(), "maps");
             File target = new File(dataDirectory, name);
             SkyWarsReloaded.getWM().deleteWorld(target);
-            File source = new File(SkyWarsReloaded.get().getServer().getWorldContainer().getAbsolutePath(), name);
+            File source = SkyWarsReloaded.getWM().getWorldFolder(name);
             SkyWarsReloaded.getWM().copyWorld(source, target);
             if (toMsg != null) {
                 toMsg.sendMessage(new Messaging.MessageFormatter().setVariable("mapname", name).format("maps.saved"));

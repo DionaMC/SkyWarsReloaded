@@ -381,7 +381,7 @@ public class PlayerManager {
     public void updateAllSpectatorInventories(GameMap gameMap, @Nullable Player playerToNotUpdate) {
         for (UUID uuid : gameMap.getSpectators()) {
             if (playerToNotUpdate != null && !uuid.equals(playerToNotUpdate.getUniqueId())) {
-                Player spec = SkyWarsReloaded.get().getServer().getPlayer(uuid);
+                Player spec = Util.get().getPlayer(uuid);
                 this.prepareSpectateInv(spec, gameMap);
             }
         }

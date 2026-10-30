@@ -9,6 +9,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -166,8 +167,19 @@ public class Util {
         }
     }
 
-    public boolean isBusy(UUID uuid) {
+    /**
+     * The player with this UUID: an online player, or a player entity in a world that never joined, as the bodies
+     * of NPC and bot plugins are.
+     */
+    public Player getPlayer(UUID uuid) {
         Player player = SkyWarsReloaded.get().getServer().getPlayer(uuid);
+        if (player != null || !Bukkit.isPrimaryThread()) return player;
+        Entity entity = Bukkit.getEntity(uuid);
+        return entity instanceof Player ? (Player) entity : null;
+    }
+
+    public boolean isBusy(UUID uuid) {
+        Player player = getPlayer(uuid);
 
         if (player == null) return true;
         if (player.isDead()) return true;
@@ -194,7 +206,7 @@ public class Util {
         if (SkyWarsReloaded.get().isEnabled()) {
             return new BukkitRunnable() {
                 public void run() {
-                    if (System.currentTimeMillis() >= startTime + length * 1000 || SkyWarsReloaded.get().getServer().getPlayer(player.getUniqueId()) == null) {
+                    if (System.currentTimeMillis() >= startTime + length * 1000 || getPlayer(player.getUniqueId()) == null) {
                         this.cancel();
                     } else {
                         for (int i = 0; i < fireworksPer5Tick; ++i) {

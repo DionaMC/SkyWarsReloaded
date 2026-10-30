@@ -767,7 +767,7 @@ public class MatchManager {
                     // Clear Spectators
                     ImmutableList<UUID> spectatorUUIDs = ImmutableList.copyOf(gameMap.getSpectators());
                     for (final UUID uuid : spectatorUUIDs) {
-                        Player player = Bukkit.getServer().getPlayer(uuid);
+                        Player player = Util.get().getPlayer(uuid);
                         if (player != null)
                             SkyWarsReloaded.get().getPlayerManager().removePlayer(
                                     player,

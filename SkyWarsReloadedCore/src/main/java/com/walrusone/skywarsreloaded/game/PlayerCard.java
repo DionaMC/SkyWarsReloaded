@@ -3,7 +3,7 @@ package com.walrusone.skywarsreloaded.game;
 import com.walrusone.skywarsreloaded.enums.Vote;
 import com.walrusone.skywarsreloaded.menus.gameoptions.objects.CoordLoc;
 import com.walrusone.skywarsreloaded.menus.gameoptions.objects.GameKit;
-import org.bukkit.Bukkit;
+import com.walrusone.skywarsreloaded.utilities.Util;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -63,7 +63,7 @@ public class PlayerCard {
         if (uuid == null) {
             return null;
         }
-        return Bukkit.getPlayer(uuid);
+        return Util.get().getPlayer(uuid);
     }
 
     @Deprecated

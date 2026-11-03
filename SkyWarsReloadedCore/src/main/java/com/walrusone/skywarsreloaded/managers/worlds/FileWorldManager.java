@@ -44,12 +44,13 @@ public class FileWorldManager implements WorldManager {
         world.setTicksPerMonsterSpawns(1);
         world.setAutoSave(!readOnly);
 
-        SkyWarsReloaded.getNMS().setGameRule(world, "doMobSpawning", "false");
-        SkyWarsReloaded.getNMS().setGameRule(world, "mobGriefing", "true");
-        SkyWarsReloaded.getNMS().setGameRule(world, "doFireTick", "true");
-        SkyWarsReloaded.getNMS().setGameRule(world, "showDeathMessages", "false");
-        SkyWarsReloaded.getNMS().setGameRule(world, "announceAdvancements", "false");
-        SkyWarsReloaded.getNMS().setGameRule(world, "doDaylightCycle", "false");
+        // Paper 26 looks game rules up by their registry key; doFireTick became a radius, 128 being "on"
+        SkyWarsReloaded.getNMS().setGameRule(world, "spawn_mobs", "false");
+        SkyWarsReloaded.getNMS().setGameRule(world, "mob_griefing", "true");
+        SkyWarsReloaded.getNMS().setGameRule(world, "fire_spread_radius_around_player", "128");
+        SkyWarsReloaded.getNMS().setGameRule(world, "show_death_messages", "false");
+        SkyWarsReloaded.getNMS().setGameRule(world, "show_advancement_messages", "false");
+        SkyWarsReloaded.getNMS().setGameRule(world, "advance_time", "false");
 
         boolean loaded = false;
         for (World w : SkyWarsReloaded.get().getServer().getWorlds()) {
